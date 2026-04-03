@@ -37,8 +37,13 @@ def setup(python_exe: str, ext_dir: Path, gpu_sm: int) -> None:
     # ------------------------------------------------------------------ #
     # PyTorch — choose version based on GPU architecture
     # ------------------------------------------------------------------ #
-    if gpu_sm >= 70:
-        # Volta and newer — PyTorch 2.6 + CUDA 12.4
+    if gpu_sm >= 100:
+        # Blackwell (RTX 50xx) — PyTorch 2.7+ + CUDA 12.8
+        torch_index = "https://download.pytorch.org/whl/cu128"
+        torch_pkgs  = ["torch>=2.7.0", "torchvision>=0.22.0"]
+        print(f"[setup] GPU SM {gpu_sm} (Blackwell) -> PyTorch 2.7 + CUDA 12.8")
+    elif gpu_sm >= 70:
+        # Volta to Ada (RTX 20/30/40) — PyTorch 2.6 + CUDA 12.4
         torch_index = "https://download.pytorch.org/whl/cu124"
         torch_pkgs  = ["torch==2.6.0", "torchvision==0.21.0"]
         print(f"[setup] GPU SM {gpu_sm} -> PyTorch 2.6 + CUDA 12.4")
