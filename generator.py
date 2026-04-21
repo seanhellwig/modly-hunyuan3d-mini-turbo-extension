@@ -51,7 +51,12 @@ class Hunyuan3DMiniTurboGenerator(BaseGenerator):
         import torch
         from hy3dgen.shapegen import Hunyuan3DDiTFlowMatchingPipeline
 
-        device = "cuda" if torch.cuda.is_available() else "cpu"
+        if torch.cuda.is_available():
+            device = "cuda"
+        elif getattr(torch.backends, "mps", None) and torch.backends.mps.is_available():
+            device = "mps"
+        else:
+            device = "cpu"
         dtype  = torch.float16 if device == "cuda" else torch.float32
 
         subfolder = self.download_check if self.download_check else _SUBFOLDER
